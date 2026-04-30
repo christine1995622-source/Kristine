@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHENBRO Site Visit</title>
+    <style>
+        /* 核心修正：避免寬度被撐破 */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-color: #4a4a4a;
+            --secondary-color: #6c757d;
+            --accent-color: #adb5bd;
+            --bg-color: #fdfdfd;
+            --border-color: #dee2e6;
+            --text-color: #333333;
+            --light-gray: #f2f2f2;
+            --link-color: #3182ce;
+        }
+        body {
+            font-family: '-apple-system', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1250px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+            width: 100%;
+        }
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        .header-info {
+            margin-top: 8px;
+            font-size: 0.95rem;
+            color: #e9ecef;
+            line-height: 1.5;
+        }
+        .content {
+            padding: 20px;
+        }
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.25rem;
+        }
+        
+        /* 桌機版表格樣式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.95em;
+            table-layout: fixed; /* 讓寬度更穩定 */
+        }
+        th, td {
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            vertical-align: top;
+            word-wrap: break-word;
+        }
+        th {
+            background-color: var(--light-gray);
+            color: var(--primary-color);
+            text-align: center;
+            font-size: 1em;
+            font-weight: 600;
+        }
+        td {
+            background-color: #ffffff;
+        }
+        .col-date { width: 8%; text-align: center; font-weight: bold; }
+        .col-schedule { width: 40%; }
+        .col-items { width: 17%; }
+        .col-participants { width: 13%; }
+        .col-accom { width: 22%; }
+        
+        .daily-title {
+            font-size: 1.05em;
+            font-weight: bold;
+            color: #343a40;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .time-slot {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .time-slot:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .time-label {
+            display: inline-block;
+            background-color: #e9ecef;
+            color: #495057;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-right: 8px;
+            text-align: center;
+        }
+        .transport-route {
+            background-color: #f8f9fa;
+            border-left: 3px solid #ced4da;
+            padding: 6px 10px;
+            margin-top: 6px;
+            border-radius: 0 4px 4px 0;
+            font-size: 0.85em;
+            color: #6c757d;
+        }
+        .flight-box {
+            background-color: #fdfdfd;
+            border: 1px solid #dee2e6;
+            padding: 8px 10px;
+            border-radius: 4px;
+            margin-top: 6px;
+            font-size: 0.85em;
+            color: #555;
+        }
+        .map-link {
+            display: inline-flex;
+            align-items: center;
+            background-color: #f8f9fa;
+            color: #495057;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: bold;
+            border: 1px solid #ced4da;
+            transition: all 0.2s;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+        .map-link:hover { background-color: #e9ecef; }
+        
+        .accom-card {
+            background-color: #fdfdfd;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 0.9em;
+        }
+        .hotel-name {
+            display: block;
+            margin-top: 4px;
+            margin-bottom: 8px;
+            font-size: 1.05em;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .compact-checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .compact-checklist label {
+            display: flex;
+            align-items: flex-start;
+            font-size: 0.9em;
+            cursor: pointer;
+            line-height: 1.4;
+        }
+        .compact-checklist input[type="checkbox"] {
+            margin-top: 3px;
+            margin-right: 8px;
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+        .compact-checklist input[type="checkbox"]:checked + span {
+            text-decoration: line-through;
+            color: #adb5bd;
+        }
+
+        .participant-group {
+            margin-bottom: 10px;
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+        .participant-group strong {
+            color: #495057;
+            background-color: #f1f3f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 3px;
+        }
+
+        .baggage-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .category-box {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .category-title {
+            background-color: var(--light-gray);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+            color: var(--primary-color);
+        }
+        .text-link {
+            color: var(--link-color);
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 1px solid var(--link-color);
+        }
+        .text-link:hover { color: #2b6cb0; border-bottom-color: #2b6cb0; }
+
+        /* ======== 全新優化的手機版 RWD (卡片式排版) ======== */
+        @media screen and (max-width: 900px) {
+            body { padding: 10px; }
+            .content { padding: 15px; }
+            table, thead, tbody, th, td, tr { display: block; width: 100%; }
+            thead { display: none; } /* 隱藏桌機表頭 */
+            
+            /* 將每一天的行程變成獨立卡片 */
+            tr { 
+                margin-bottom: 25px; 
+                border: 1px solid var(--border-color); 
+                border-radius: 10px; 
+                box-shadow: 0 4px 10px rgba(0,0,0,0.08); 
+                overflow: hidden;
+                background: white;
+            }
+            td { 
+                padding: 15px; 
+                border: none; 
+                border-bottom: 1px solid #eeeeee; 
+                position: relative;
+            }
+            td:last-child { border-bottom: none; }
+            
+            /* 將日期變成卡片的深色大標題 */
+            .col-date { 
+                background-color: var(--primary-color); 
+                color: white; 
+                text-align: left; 
+                font-size: 1.1em; 
+                padding: 12px 15px;
+            }
+            
+            /* 為每一個欄位加上灰底標籤，由上而下排列 */
+            td:not(.col-date)::before {
+                content: attr(data-label);
+                display: block;
+                font-weight: bold; 
+                color: var(--primary-color);
+                background: #f1f3f5;
+                padding: 4px 8px;
+                border-radius: 4px;
+                font-size: 0.85em;
+                margin-bottom: 10px;
+                width: max-content;
+            }
+            
+            .baggage-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>CHENBRO Site Visit</h1>
+        <div class="header-info">
+            日期：2026/05/06 (三) - 05/11 (一)<br>
+            ✈️ 去程：5/6 星宇 JX725 (11:15 TPE ➔ 16:10 KUL)<br>
+            ✈️ 回程：5/11 星宇 JX772 (14:00 SIN ➔ 18:50 TPE)
+        </div>
+    </header>
+
+    <div class="content">
+        <h2>📅 行程安排</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-date">日期</th>
+                    <th class="col-schedule">行程與交通</th>
+                    <th class="col-items">當日必備物品</th>
+                    <th class="col-participants">參與人員</th>
+                    <th class="col-accom">住宿與地標</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 5/6 -->
+                <tr>
+                    <td class="col-date">5/6 (三)</td>
+                    <td class="col-schedule" data-label="📍 行程與交通">
+                        <div class="daily-title">🛫 啟程：前往吉隆坡</div>
+                        <div class="time-slot">
+                            <span class="time-label">上午</span> 前往桃園機場
+                            <div class="transport-route">🚖 搭車：家裡出發 ➔ 桃園機場 (TPE) <br>⏱️ 車程約 40-50 分鐘</div>
+                        </div>
+                        <div class="time-slot">
+                            <span class="time-label">下午</span> 飛行交通時間
+                            <div class="flight-box">
+                                ✈️ <strong>星宇航空 JX725</strong><br>
+                                🛫 11:15 台北 (TPE)<br>
+                                🛬 16:10 吉隆坡 (KUL)
+                            </div>
+                        </div>
+                        <div class="time-slot">
+                            <span class="time-label">晚上</span> 抵達吉隆坡，直接前往飯店 Check-in
+                            <div class="transport-route">🚖 搭車：機場 (KLIA) ➔ 飯店 <br>⏱️ 車程約 1 小時</div>
+                        </div>
+                    </td>
+                    <td class="col-items" data-label="🎒 當日必備物品">
+                        <div class="compact-checklist">
+                            <label><input type="checkbox"><span>護照與機票電子檔</span></label>
+                            <label><input type="checkbox"><span>入境電子申報憑證</span></label>
+                            <label><input type="checkbox"><span>當地網卡/漫遊手機</span></label>
+                        </div>
+                    </td>
+                    <td class="col-participants" data-label="👥 參與人員">
+                        <div class="participant-group"><strong>Hoh-O</strong><br>Kristine, Frank</div>
+                    </td>
+                    <td class="col-accom" data-label="🏨 住宿地點">
+                        <div class="accom-card">
+                            <strong>吉隆坡住宿 (5/6-5/7)</strong><br>
+                            <span class="hotel-name">Vivatel Hotel Kuala Lumpur</span>
+                            <a class="map-link" href="https://maps.app.goo.gl/csypjWpAbJikWK558" target="_blank">📍 Google Map 導航</a>
+                        </div>
+                    </td>
+                </tr>
+                <!-- 5/7 -->
+                <tr>
+                    <td class="col-date">5/7 (四)</td>
+                    <td class="col-schedule" data-label="📍 行程與交通">
+                        <div class="daily-title">🏢 會議：Adamas 全日專案會議</div>
+                        <div class="time-slot">
+                            <span class="time-label">上午</span> 前往 Adamas 開會
+                            <div class="transport-route">🚖 搭車：飯店 ➔ Adamas 辦公室 <br>⏱️ 車程視市區路況</div>
+                            <a class="map-link" href="https://maps.app.goo.gl/6KtyTHjjCBgb9xUb7" target="_blank">📍 Adamas 地址導航</a>
+                        </div>
+                        <div class="time-slot">
+                            <span class="time-label">下午</span> 與 Adamas 開會 (續)
+                        </div>
+                        <div class="time-slot">
+                            <span class="time-label">晚上</span> 返回飯店休息
+                            <div class="transport-route">🚖 搭車：Adamas 辦公室 ➔ 飯店</div>
+                        </div>
+                    </td>
+                    <td class="col-items" data-label="🎒 當日必備物品">
+                        <div class="compact-checklist">
+                            <label><input type="checkbox"><span>筆記本與多色原子筆</span></label>
+                            <label><input type="checkbox"><span>筆電</span></label>
+                            <label><input type="checkbox"><span>平板</span></label>
+                            <label><input type="checkbox"><span>名片</span></label>
+                        </div>
+                    </td>
+                    <td class="col-participants" data-label="👥 參與人員">
+                        <div class="participant-group"><strong>Hoh-O</strong><br>Kristine, Frank</div>
+                        <div class="participant-group"><strong>Adamas</strong><br>Gary, Charmaine</div>
+                    </td>
+                    <td class="col-accom" data-label="🏨 住宿地點">
+                        <div class="accom-card">
+                            <strong>吉隆坡住宿 (5/6-5/7)</strong><br>
+                            <span class="hotel-name">Vivatel Hotel Kuala Lumpur</span>
+                            <a class="map-link" href="https://maps.app.goo.gl/csypjWpAbJikWK558" target="_blank">📍 Google Map 導航</a>
+                        </div>
+                    </td>
+                </tr>
+                <!-- 5/8 -->
+                <tr>
+                    <td class="col-date">5/8 (五)</td>
+                    <td class="col-schedule" data-label="📍 行程與交通">
+                        <div class="daily-title">🚗 移動：南下新山與建築師會合現勘</div>
+                        <div class="time-slot">
+                            <span class="time-label">上午</span> 搭車南下前往新山 (Johor Bahru)
+                            <div class="transport-route">🚖 包車/搭車：吉隆坡 ➔ 新山 CHENBRO 工地 / 飯店 <br>⏱️ 車程約 3.5 - 4 小時</div>
+                        </div>
+                        <div class="time-slot">
+                            <span class="time-label">下午</span> 抵達新山，與建築師會合，前往工地勘查
+                            <a class="map-link" href="https://maps.app.goo.gl/Rw2vkox1KCX8q2sAA" target="_blank">📍 CHENBRO 現場地址</a>
+                        </div>
+                        <div class="time-slot">
+                            <span class="time-label">晚上</span> 前往新山飯店 Check-in
+                            <div class="transport-route">🚖 搭車：CHENBRO 工地 ➔ 飯店</div>
+                        </div>
+                    </td>
+                    <td class="col-items" data-label="🎒 當日必備物品">
+                        <div class="compact-checklist">
+                            <label><input type="checkbox"><span>紙本施工套圖</span></label>
+                            <label><input type="checkbox"><span>工地安全帽</span></label>
+                            <label><input type="checkbox"><span>雷射測距儀</span></label>
+                            <label><input type="checkbox"><span>捲尺 (5M以上)</span></label>
+                            <label><input type="checkbox"><span>現場勘查用夾板</span></label>
+                            <label><input type="checkbox"><span>防護鞋/安全裝備</span></label>
+                            <label><input type="checkbox"><span>行動電源</span></label>
+                        </div>
+                    </td>
+                    <td class="col-participants" data-label="👥 參與人員">
+                        <div class="participant-group"><strong>Hoh-O</strong><br>Kristine, Frank</div>
+                        <div class="participant-group"><strong>Adamas</strong><br>Gary, Charmaine, Khairul</div>
+                        <div class="participant-group"><strong>Chenbro</strong><br>Ethan</div>
+                        <div class="participant-group"><strong>建築師</strong><br>湯晨, 陳建築師</div>
+                    </td>
+                    <td class="col-accom" data-label="🏨 住宿地點">
+                        <div class="accom-card">
+                            <strong>新山住宿 (5/8)</strong><br>
+                            <span class="hotel-name">Impiana Hotel Senai</span>
+                            <a class="map-link" href="https://maps.app.goo.gl/yy5MRMtkSLH6RDMA9" target="_blank">📍 Google Map 導航</a>
+                        </div>
+                    </td>
+                </tr>
+                <!-- 5/9 -->
+                <tr>
+                    <td class="col-date">5/9 (六)</td>
+                    <td class="col-schedule" data-label="📍 行程與交通">
+                        <div class="daily-title">🏗️ 現勘：與建築師現場會議 (通關至新加坡)</div>
+                        <div class="time-slot">
+                            <span class="time-label">上午</span> 再次前往工地，與建築師、承包商於現場討論
+                            <div class="transport-route">🚖 搭車：飯店 ➔ CHENBRO 工地</div>
+                        </div>
+                        <div class="time-slot">
+                            <span class="time-label">下午</span> 準備跨國通關前往新加坡
+                            <div class="transport-route">🚖 包車/跨國搭車：新山 ➔ 新加坡飯店 <br>⏱️ 跨國通關約 1.5 - 3 小時 (視車流)</div>
+                        </div>
+                        <div class="time-slot">
+                            <span class="time-label">晚上</span> 新加坡飯店 Check-in
+                        </div>
+                    </td>
+                    <td class="col-items" data-label="🎒 當日必備物品">
+                        <div class="compact-checklist">
+                            <label><input type="checkbox"><span>紙本施工套圖</span></label>
+                            <label><input type="checkbox"><span>現場檢核表</span></label>
+                            <label><input type="checkbox"><span>測量工具 (備用)</span></label>
+                            <label><input type="checkbox"><span>護照 (跨國通關用)</span></label>
+                            <label><input type="checkbox"><span>筆電</span></label>
+                            <label><input type="checkbox"><span>平板</span></label>
+                        </div>
+                    </td>
+                    <td class="col-participants" data-label="👥 參與人員">
+                        <div class="participant-group"><strong>Hoh-O</strong><br>Kristine, Frank</div>
+                        <div class="participant-group"><strong>Adamas</strong><br>Gary, Charmaine, Khairul</div>
+                        <div class="participant-group"><strong>Chenbro</strong><br>Ethan</div>
+                        <div class="participant-group"><strong>建築師</strong><br>湯晨, 陳建築師</div>
+                    </td>
+                    <td class="col-accom" data-label="🏨 住宿地點">
+                        <div class="accom-card">
+                            <strong>新加坡住宿 (5/9-5/10)</strong><br>
+                            <span class="hotel-name">Hotel 1900</span>
+                            <a class="map-link" href="https://maps.app.goo.gl/gvtDfMDeLMGijvyg7" target="_blank">📍 Google Map 導航</a>
+                        </div>
+                    </td>
+                </tr>
+                <!-- 5/10 -->
+                <tr>
+                    <td class="col-date">5/10 (日)</td>
+                    <td class="col-schedule" data-label="📍 行程與交通">
+                        <div class="daily-title">🤝 總結：新加坡後續對策討論</div>
+                        <div class="time-slot">
+                            <span class="time-label">上午</span> 與偉國碰面，討論現場發現之問題與後續施作對策
+                            <div class="transport-route">🚖 搭車：飯店 ➔ 會議地點 (待定)</div>
+                        </div>
+                        <div class="time-slot">
+                            <span class="time-label">下午</span> 與偉國一同用餐
+                        </div>
+                        <div class="time-slot">
+                            <span class="time-label">晚上</span> 返回飯店 / 自由時間
+                            <div class="transport-route">🚖 搭車：返回飯店</div>
+                        </div>
+                    </td>
+                    <td class="col-items" data-label="🎒 當日必備物品">
+                        <div class="compact-checklist">
+                            <label><input type="checkbox"><span>筆記本/夾板</span></label>
+                            <label><input type="checkbox"><span>現場勘查紀錄與照片</span></label>
+                        </div>
+                    </td>
+                    <td class="col-participants" data-label="👥 參與人員">
+                        <div class="participant-group"><strong>Hoh-O</strong><br>Kristine, Frank, 偉國</div>
+                    </td>
+                    <td class="col-accom" data-label="🏨 住宿地點">
+                        <div class="accom-card">
+                            <strong>新加坡住宿 (5/9-5/10)</strong><br>
+                            <span class="hotel-name">Hotel 1900</span>
+                            <a class="map-link" href="https://maps.app.goo.gl/gvtDfMDeLMGijvyg7" target="_blank">📍 Google Map 導航</a>
+                        </div>
+                    </td>
+                </tr>
+                <!-- 5/11 -->
+                <tr>
+                    <td class="col-date">5/11 (一)</td>
+                    <td class="col-schedule" data-label="📍 行程與交通">
+                        <div class="daily-title">🛬 返程：返回台灣</div>
+                        <div class="time-slot">
+                            <span class="time-label">上午</span> 前往機場
+                            <div class="transport-route">🚖 搭車：飯店 ➔ 樟宜機場 (SIN) <br>⏱️ 車程約 30-40 分鐘</div>
+                        </div>
+                        <div class="time-slot">
+                            <span class="time-label">下午</span> 搭機返程
+                            <div class="flight-box">
+                                ✈️ <strong>星宇航空 JX772</strong><br>
+                                🛫 14:00 新加坡 (SIN)<br>
+                                🛬 18:50 台北 (TPE)
+                            </div>
+                        </div>
+                        <div class="time-slot">
+                            <span class="time-label">晚上</span> 抵達台灣，返回溫暖的家
+                            <div class="transport-route">🚖 搭車：桃園機場 ➔ 家裡 <br>⏱️ 車程約 40-50 分鐘</div>
+                        </div>
+                    </td>
+                    <td class="col-items" data-label="🎒 當日必備物品">
+                        <div class="compact-checklist">
+                            <label><input type="checkbox"><span>護照</span></label>
+                        </div>
+                    </td>
+                    <td class="col-participants" data-label="👥 參與人員">
+                        <div class="participant-group"><strong>Hoh-O</strong><br>Kristine, Frank</div>
+                    </td>
+                    <td class="col-accom" data-label="🏨 住宿地點">
+                        <div class="accom-card">
+                            <span class="hotel-name">溫暖的家</span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>📝 出國前代辦事項</h2>
+        <div class="baggage-container" style="margin-bottom: 30px;">
+            <div class="category-box">
+                <div class="category-title">機票、住宿與交通</div>
+                <div class="compact-checklist">
+                    <label><input type="checkbox"><span>確認雙段機票與三間飯店訂房</span></label>
+                    <label><input type="checkbox"><span>預定 5/8 與 5/9 跨區接駁包車</span></label>
+                    <label><input type="checkbox"><span>購買出國旅遊保險</span></label>
+                </div>
+            </div>
+            <div class="category-box">
+                <div class="category-title">入境與通關證件</div>
+                <div class="compact-checklist">
+                    <label><input type="checkbox"><span>抵達前3日填寫 <a href="https://imigresen-online.imi.gov.my/mdac/main" target="_blank" class="text-link">馬來西亞 (MDAC)</a></span></label>
+                    <label><input type="checkbox"><span>抵達前3日填寫 <a href="https://eservices.ica.gov.sg/sgarrivalcard/" target="_blank" class="text-link">新加坡 (SG Arrival)</a></span></label>
+                </div>
+            </div>
+            <div class="category-box">
+                <div class="category-title">專案準備</div>
+                <div class="compact-checklist">
+                    <label><input type="checkbox"><span>準備紙本施工套圖</span></label>
+                    <label><input type="checkbox"><span>拷貝專案檔案至出差筆電</span></label>
+                    <label><input type="checkbox"><span>準備現場檢核表與圖面 PDF</span></label>
+                </div>
+            </div>
+            <div class="category-box">
+                <div class="category-title">個人與財務準備</div>
+                <div class="compact-checklist">
+                    <label><input type="checkbox"><span>開通新馬雙國網卡或電信漫遊</span></label>
+                    <label><input type="checkbox"><span>換匯 (MYR/SGD) 及備妥信用卡</span></label>
+                    <label><input type="checkbox"><span>準備預防藥物與個人常備腸胃藥</span></label>
+                </div>
+            </div>
+        </div>
+
+        <h2>🎒 行李清單</h2>
+        <div class="baggage-container">
+            <!-- 隨身物品 -->
+            <div class="category-box">
+                <div class="category-title">隨身物品</div>
+                <div class="compact-checklist">
+                    <label><input type="checkbox"><span>護照 (含影本)</span></label>
+                    <label><input type="checkbox"><span>身分證</span></label>
+                    <label><input type="checkbox"><span>國際駕照</span></label>
+                    <label><input type="checkbox"><span>Wifi / 網卡</span></label>
+                    <label><input type="checkbox"><span>雨傘 (防雷陣雨)</span></label>
+                    <label><input type="checkbox"><span>保溫瓶</span></label>
+                    <label><input type="checkbox"><span>口罩</span></label>
+                </div>
+            </div>
+
+            <!-- 衣物 -->
+            <div class="category-box">
+                <div class="category-title">衣物</div>
+                <div class="compact-checklist">
+                    <label><input type="checkbox"><span>短袖衣服</span></label>
+                    <label><input type="checkbox"><span>長褲</span></label>
+                    <label><input type="checkbox"><span>短褲</span></label>
+                    <label><input type="checkbox"><span>外套</span></label>
+                    <label><input type="checkbox"><span>內衣褲</span></label>
+                    <label><input type="checkbox"><span>襪子</span></label>
+                    <label><input type="checkbox"><span>睡衣</span></label>
+                    <label><input type="checkbox"><span>拖鞋</span></label>
+                    <label><input type="checkbox"><span>帽子 / 太陽眼鏡</span></label>
+                    <label><input type="checkbox"><span>工地防護鞋/包覆鞋</span></label>
+                </div>
+            </div>
+
+            <!-- 清潔用品 -->
+            <div class="category-box">
+                <div class="category-title">清潔用品</div>
+                <div class="compact-checklist">
+                    <label><input type="checkbox"><span>牙刷牙膏</span></label>
+                    <label><input type="checkbox"><span>洗面乳</span></label>
+                    <label><input type="checkbox"><span>棉花棒</span></label>
+                    <label><input type="checkbox"><span>毛巾</span></label>
+                    <label><input type="checkbox"><span>衛生紙</span></label>
+                    <label><input type="checkbox"><span>濕紙巾 / 涼感巾</span></label>
+                    <label><input type="checkbox"><span>酒精 / 乾洗手</span></label>
+                    <label><input type="checkbox"><span>防蚊液</span></label>
+                </div>
+            </div>
+
+            <!-- 電器相關 -->
+            <div class="category-box">
+                <div class="category-title">電器與現勘裝備</div>
+                <div class="compact-checklist">
+                    <label><input type="checkbox"><span>出差用筆電 & 充電器</span></label>
+                    <label><input type="checkbox"><span>平板</span></label>
+                    <label><input type="checkbox"><span>手機 & 充電線</span></label>
+                    <label><input type="checkbox"><span>行動電源</span></label>
+                    <label><input type="checkbox"><span>萬國轉接頭 (英規三孔)</span></label>
+                    <label><input type="checkbox"><span>隨身硬碟 / 隨身碟</span></label>
+                    <label><input type="checkbox"><span>雷射測距儀</span></label>
+                    <label><input type="checkbox"><span>捲尺 & 紀錄夾板</span></label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
